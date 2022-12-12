@@ -4,17 +4,29 @@ import { RouterView } from "vue-router";
 
 <template>
   <div class="h-full w-full">
-    <RouterView />
+    <RouterView v-slot="{ Component, route }">
+      <Transition name="slide">
+        <component :is="Component" :key="route.path" />
+      </Transition>
+    </RouterView>
   </div>
 </template>
 
 <style>
-html,
-body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: #f7fafc;
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.5s ease;
+}
+
+.slide-leave-to {
+  position: absolute;
+  transform: translateX(50%);
+  opacity: 0;
+}
+
+.slide-enter-from {
+  position: absolute;
+  transform: translateX(-50%);
+  opacity: 0;
 }
 </style>
