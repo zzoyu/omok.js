@@ -5,7 +5,7 @@ import { RouterView } from "vue-router";
 <template>
   <div class="h-full w-full">
     <RouterView v-slot="{ Component, route }">
-      <Transition name="slide">
+      <Transition :name="route.meta.transition || 'slide'">
         <component :is="Component" :key="route.path" />
       </Transition>
     </RouterView>
@@ -27,6 +27,17 @@ import { RouterView } from "vue-router";
 .slide-enter-from {
   position: absolute;
   transform: translateX(-50%);
+  opacity: 0;
+}
+
+/* fade transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>

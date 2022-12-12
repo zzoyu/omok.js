@@ -7,6 +7,7 @@ const router = createRouter({
     {
       path: "/",
       name: "main",
+      meta: { transition: "fade" },
       component: MainView,
     },
     {
