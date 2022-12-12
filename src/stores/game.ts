@@ -8,5 +8,7 @@ export const useStore = defineStore("game", () => {
     return isMyTurn.value ? "내 차례" : "상대 차례";
   });
 
-  return { isMyTurn, getTurnText };
+  const gameGrid = ref(Array.from(Array(10), () => new Array(10)));
+
+  return { isMyTurn, getTurnText, gameGrid };
 });
