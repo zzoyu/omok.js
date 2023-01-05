@@ -2,7 +2,7 @@
 import { StoneType } from "@/classes/Stone";
 import BaseOmokCell from "@/components/BaseOmokCell.vue";
 import { useStore } from "@/stores/game";
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 
 import imageGrid from "@/assets/images/grid.png";
 
@@ -23,7 +23,19 @@ const updateCurrentPosition = (e: MouseEvent) => {
   currentCol.value = col;
 };
 
+watch(
+  () => store.isMyTurn,
+  (isMyTurn) => {
+    if (!isMyTurn) {
+      nextTick(() => {
+        store.setOponentStone();
+      });
+    }
+  }
+);
+
 const handleClick = (e: MouseEvent) => {
+  if (!store.isMyTurn) return;
   const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
@@ -32,10 +44,23 @@ const handleClick = (e: MouseEvent) => {
   const col = Math.floor(x / 64);
 
   addStone({ row, col });
+  drawCanvas();
+
+  nextTick(() => {
+    if (store.checkWinAndChangeTurn(store.myStone)) {
+      nextTick(() => {
+        showWinDialog();
+      });
+    }
+  });
+};
+
+const showWinDialog = () => {
+  alert("You win!");
 };
 
 const addStone = (position: { row: number; col: number }) => {
-  store.gameGrid[position.row][position.col] = StoneType.BLACK;
+  store.setStone(position);
 };
 
 const canvas = ref<HTMLCanvasElement | null>(null);
@@ -45,6 +70,9 @@ black.src = "/sample_black.png";
 
 const white = new Image();
 white.src = "/sample_white.png";
+
+const grid = new Image();
+grid.src = "/grid.png";
 
 // draw canvas
 const drawCanvas = () => {
@@ -56,18 +84,13 @@ const drawCanvas = () => {
   // ctx.fillStyle = "black";
   // ctx.fillRect(0, 0, 640, 640);
 
-  // load image
-  const img = new Image();
-  img.src = imageGrid;
-  img.onload = () => {
-    // draw scaled tile, 32 to 64, filling 640x640 grid.
+  // draw scaled tile, 32 to 64, filling 640x640 grid.
 
-    for (let x = 0; x < 640; x += 64) {
-      for (let y = 0; y < 640; y += 64) {
-        ctx.drawImage(img, 0, 0, 32, 32, x, y, 64, 64);
-      }
+  for (let x = 0; x < 640; x += 64) {
+    for (let y = 0; y < 640; y += 64) {
+      ctx.drawImage(grid, 0, 0, 32, 32, x, y, 64, 64);
     }
-  };
+  }
 
   // draw stones
   for (let row = 0; row < 10; row++) {
@@ -81,9 +104,20 @@ const drawCanvas = () => {
     }
   }
 
-  ctx.globalAlpha = 0.5;
-  ctx.drawImage(black, currentCol.value * 64, currentRow.value * 64, 64, 64);
-  ctx.globalAlpha = 1;
+  // draw current position
+  if (store.isMyTurn) {
+    ctx.globalAlpha = 0.5;
+    ctx.drawImage(black, currentCol.value * 64, currentRow.value * 64, 64, 64);
+    ctx.globalAlpha = 1;
+  }
+
+  // highlight last stone position border
+  if (store.lastStonePosition) {
+    const { row, col } = store.lastStonePosition;
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 5;
+    ctx.strokeRect(col * 64, row * 64, 64, 64);
+  }
 
   // keep drawing
   requestAnimationFrame(drawCanvas);
