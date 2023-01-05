@@ -1,0 +1,1 @@
+import{a,b as s,e as o,h as c,i as n,_ as l,f as r,j as _,k as i}from"./index-e3d9b003.js";const u={class:"h-full w-full flex flex-col items-center justify-around"},f=r("div",null,"온라인 기능은 준비중입니다.",-1),k=a({__name:"GameOnline",setup(d){const e=i(),t=()=>{e.back()};return(m,p)=>(s(),o("main",u,[f,c(l,{"on-click":t},{default:n(()=>[_("뒤로가기")]),_:1})]))}});export{k as default};
