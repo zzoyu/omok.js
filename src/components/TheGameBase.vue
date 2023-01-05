@@ -4,8 +4,6 @@ import BaseOmokCell from "@/components/BaseOmokCell.vue";
 import { useStore } from "@/stores/game";
 import { nextTick, onMounted, ref, watch } from "vue";
 
-import imageGrid from "@/assets/images/grid.png";
-
 const store = useStore();
 
 const currentRow = ref(0);
