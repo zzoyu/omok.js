@@ -64,13 +64,13 @@ const addStone = (position: { row: number; col: number }) => {
 const canvas = ref<HTMLCanvasElement | null>(null);
 
 const black = new Image();
-black.src = "/sample_black.png";
+black.src = import.meta.env.BASE_URL + "sample_black.png";
 
 const white = new Image();
-white.src = "/sample_white.png";
+white.src = import.meta.env.BASE_URL + "sample_white.png";
 
 const grid = new Image();
-grid.src = "/grid.png";
+grid.src = import.meta.env.BASE_URL + "grid.png";
 
 // draw canvas
 const drawCanvas = () => {
