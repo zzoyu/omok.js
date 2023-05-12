@@ -1,4 +1,4 @@
-import { ref, computed, nextTick } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { StoneType } from "@/classes/Stone";
 

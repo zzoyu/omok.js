@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { getCurrentInstance } from "vue";
 import { RouterView } from "vue-router";
-import useSocketStore from "./stores/socket";
-useSocketStore();
+import { useSocket } from "./stores/socket";
+useSocket();
 </script>
 
 <template>
   <div class="h-full w-full">
+    <base-modal></base-modal>
     <RouterView v-slot="{ Component, route }">
       <Transition :name="route.meta.transition || 'slide'">
         <component :is="Component" :key="route.path" />

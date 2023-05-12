@@ -1,18 +1,13 @@
 import { defineStore } from "pinia";
-import { io } from "socket.io-client";
-import { getCurrentInstance, ref } from "vue";
+import { io, Socket } from "socket.io-client";
+import { ref } from "vue";
 
-const useSocketStore = defineStore<{
-  instance: SocketIOClient.Socket;
-}>("socket", () => {
+export const useSocket = defineStore("socket", () => {
   console.log(import.meta.env);
-  const instance = ref(
-    io(import.meta.env.VITE_SOCKET_URL, {
-      transports: ["websocket"],
-    })
-  );
+  const instance = ref<Socket>();
+  instance.value = io(import.meta.env.VITE_SOCKET_URL, {
+    transports: ["websocket"],
+  });
 
   return { instance };
 });
-
-export default useSocketStore;
