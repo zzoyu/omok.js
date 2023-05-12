@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
 const props = defineProps<{
   onClick?: () => void;
   onClickConfirm?: { message: string; callback: () => void };

@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { getCurrentInstance } from "vue";
 import { RouterView } from "vue-router";
+import useSocketStore from "./stores/socket";
+useSocketStore();
 </script>
 
 <template>
